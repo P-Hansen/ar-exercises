@@ -27,16 +27,16 @@ ActiveRecord::Schema.define do
   drop_table :employees if ActiveRecord::Base.connection.table_exists?(:employees)
   create_table :stores do |t|
     t.column :name, :string
-    t.column :annual_revenue, :integer
+    t.column :annual_revenue, :integer, comparison: {greater_than_or_equal_to: 0}
     t.column :mens_apparel, :boolean
     t.column :womens_apparel, :boolean
     t.timestamps null: false
   end
   create_table :employees do |table|
-    table.references :store
-    table.column :first_name, :string
-    table.column :last_name, :string
-    table.column :hourly_rate, :integer
+    table.references :store, presence: true
+    table.column :first_name, :string, presence: true, length: { minimum: 3 }
+    table.column :last_name, :string, presence: true
+    table.column :hourly_rate, :integer, comparison: {greater_then: 40}, comparison: {less_then: 200}
     table.timestamps null: false
   end
 end
